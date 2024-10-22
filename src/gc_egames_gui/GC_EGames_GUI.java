@@ -1,5 +1,6 @@
 package gc_egames_gui;
 
+import gc_egames_gui.DB_Read;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -279,16 +280,57 @@ public class GC_EGames_GUI extends javax.swing.JFrame {
                }
          }
      }
-    
-     private void displayEventListing()
-     {
-         
-     }
+    //chatgpt assisted
+     private void displayEventListing() {
+    if (comboBoxStatus) {
+        // Create an instance of the DB_Read class
+        DB_Read dbRead = new DB_Read();
+
+        // Call the method to get the event data; adjust method name as necessary
+        List<Event> events = dbRead.getEvents(); // Assuming this method returns a list of events
+
+        // Update your JComboBox with the retrieved events
+        eventResults_jComboBox.removeAllItems(); // Clear existing items
+        for (Event event : events) {
+            eventResults_jComboBox.addItem(event.getName()); // Adjust based on your Event class
+        }
+
+        // Optionally, set the selected index if needed
+        int selectedIndex_ = eventResults_jComboBox.getSelectedIndex();
+        // Do something with selectedIndex_ if needed
+    }
+}
+
      
-     private void displayGameListing()
-     {
-         
-     }
+     private void displayGameListing() {
+    // Create an instance of the DB_Read class
+    DB_Read dbRead = new DB_Read();
+
+    // Retrieve the game data; adjust the method name and return type as necessary
+    List<Game> games = dbRead.getGames(); // Assuming this method returns a list of games
+
+    // Create a model for the JTable and populate it
+    DefaultTableModel tableModel = new DefaultTableModel();
+    
+    // Define column names (adjust according to your data structure)
+    tableModel.addColumn("Game Name");
+    tableModel.addColumn("Date");
+    tableModel.addColumn("Location");
+
+    // Populate the model with game data
+    for (Game game : games) {
+        Object[] rowData = {
+            game.getName(),          // Adjust based on your Game class
+            game.getDate(),
+            game.getLocation()
+        };
+        tableModel.addRow(rowData);
+    }
+
+    // Set the model to the JTable
+    compResults_JTable.setModel(tableModel);
+}
+
      
      private void displayTeamData()
      {
@@ -305,11 +347,68 @@ public class GC_EGames_GUI extends javax.swing.JFrame {
      private void displayAllEventsLeaderBoard()
      {
          
+    DB_Read dbRead = new DB_Read();
+
+    // Retrieve the game data; adjust the method name and return type as necessary
+    List<Game> games = dbRead.getGames(); // Assuming this method returns a list of games
+
+    // Create a model for the JTable and populate it
+    DefaultTableModel tableModel = new DefaultTableModel();
+    
+    // Define column names (adjust according to your data structure)
+    tableModel.addColumn("Game Name");
+    tableModel.addColumn("Date");
+    tableModel.addColumn("Location");
+
+    // Populate the model with game data
+    for (Game game : games) {
+        Object[] rowData = {
+            game.getName(),          // Adjust based on your Game class
+            game.getDate(),
+            game.getLocation()
+        };
+        tableModel.addRow(rowData);
+    }
+
+    // Set the model to the JTable
+    allEventLeaderboard_jTable.setModel(tableModel);
      }
      
-     private void displaySelectedEventLeaderBoard()
-     {
-         
+     private void displaySelectedEventLeaderBoard() {
+    DB_Read dbRead = new DB_Read();
+    
+    // Get the selected event and team from the combo boxes
+    String selectedEvent = (String) eventResults_jComboBox.getSelectedItem();
+    String selectedTeam = (String) teamCompResults_jComboBox.getSelectedItem();
+
+    // Retrieve game data based on selected event and team; adjust method names as necessary
+    List<Game> games = dbRead.getGamesByEventAndTeam(selectedEvent, selectedTeam); // Implement this method in DB_Read
+
+    // Create a model for the JTable and populate it
+    DefaultTableModel tableModel = new DefaultTableModel();
+
+    // Define column names (adjust according to your data structure)
+    tableModel.addColumn("Game Name");
+    tableModel.addColumn("Date");
+    tableModel.addColumn("Location");
+
+    // Populate the model with game data
+    for (Game game : games) {
+        Object[] rowData = {
+            game.getName(),          // Adjust based on your Game class
+            game.getDate(),
+            game.getLocation()
+        };
+        tableModel.addRow(rowData);
+    }
+
+    // Set the model to the JTable
+    compResults_JTable.setModel(tableModel);
+}
+
+    // Set the model to the JTable
+    selectedEventLeaderboard_jTable.setModel(tableModel);
+     }
      }
     /**
      * This method is called from within the constructor to initialize the form.
